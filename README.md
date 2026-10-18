@@ -31,23 +31,21 @@ Configuracion
 
 Los datos secretos no estan en el repositorio, se configuran con variables de entorno:
 
-    ConnectionStrings__Default   cadena de conexion a SQL Server
-    Jwt__Key                     llave para firmar el token (minimo 32 caracteres)
-    Jwt__Issuer                  emisor del token
-    Jwt__Audience                audiencia del token
-    Seed__AdminEmail             email del administrador (opcional)
-    Seed__AdminPassword          contrasena del administrador (opcional)
+- ConnectionStrings__Default: cadena de conexion a SQL Server
+- Jwt__Key: llave para firmar el token (minimo 32 caracteres)
+- Jwt__Issuer: emisor del token
+- Jwt__Audience: audiencia del token
+- Seed__AdminEmail: email del administrador (opcional)
+- Seed__AdminPassword: contrasena del administrador (opcional)
 
-Ejemplo de cadena de conexion:
-
-    Server=localhost;Database=MangaHubDb;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False
+Un ejemplo de cadena de conexion es: Server=localhost;Database=MangaHubDb;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False
 
 Como ejecutarlo
 
-Dentro de la carpeta MangaHub.Api:
+Dentro de la carpeta MangaHub.Api se ejecutan estos dos comandos, en este orden:
 
-    dotnet ef database update
-    dotnet run
+- dotnet ef database update
+- dotnet run
 
 Esto crea la base de datos con algunos autores, categorias y mangas de ejemplo.
 Despues se abre Swagger en http://localhost:5018/swagger
@@ -64,29 +62,27 @@ Usuarios y roles
 
 Endpoints
 
-    POST    /api/v1/Auth/register          publico
-    POST    /api/v1/Auth/login             publico, devuelve el token
-    GET     /api/v1/Mangas                 usuario con token
-    GET     /api/v1/Mangas/{id}            usuario con token
-    POST    /api/v1/Mangas                 solo Admin
-    PUT     /api/v1/Mangas/{id}            solo Admin
-    DELETE  /api/v1/Mangas/{id}            solo Admin
-    GET     /api/v1/Autores                usuario con token
-    GET     /api/v1/Categorias             usuario con token
-    GET     /api/v1/Biblioteca             usuario con token (solo la suya)
-    POST    /api/v1/Biblioteca             usuario con token
-    GET     /api/v1/Biblioteca/{mangaId}   usuario con token
-    PUT     /api/v1/Biblioteca/{mangaId}   usuario con token
-    DELETE  /api/v1/Biblioteca/{mangaId}   usuario con token
+- POST /api/v1/Auth/register (publico)
+- POST /api/v1/Auth/login (publico, devuelve el token)
+- GET /api/v1/Mangas (usuario con token)
+- GET /api/v1/Mangas/{id} (usuario con token)
+- POST /api/v1/Mangas (solo Admin)
+- PUT /api/v1/Mangas/{id} (solo Admin)
+- DELETE /api/v1/Mangas/{id} (solo Admin)
+- GET /api/v1/Autores (usuario con token)
+- GET /api/v1/Categorias (usuario con token)
+- GET /api/v1/Biblioteca (usuario con token, solo la suya)
+- POST /api/v1/Biblioteca (usuario con token)
+- GET /api/v1/Biblioteca/{mangaId} (usuario con token)
+- PUT /api/v1/Biblioteca/{mangaId} (usuario con token)
+- DELETE /api/v1/Biblioteca/{mangaId} (usuario con token)
 
-Para usar los endpoints con token, hacer login, copiar el token y pegarlo en el boton
-Authorize de Swagger.
+Para usar los endpoints que piden token, se hace login, se copia el token y se pega en el
+boton Authorize de Swagger.
 
 Pruebas
 
-Desde la carpeta de la solucion:
-
-    dotnet test MangaHub.Tests
+Desde la carpeta de la solucion se ejecuta: dotnet test MangaHub.Tests
 
 Las pruebas usan una base de datos en memoria, no tocan la base real.
 
