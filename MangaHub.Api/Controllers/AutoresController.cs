@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using MangaHub.Api.Dtos;
 using MangaHub.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace MangaHub.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Produces("application/json")]
 public class AutoresController : ControllerBase
 {
