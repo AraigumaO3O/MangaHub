@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using MangaHub.Api.Dtos;
 using MangaHub.Api.Entities;
 using MangaHub.Api.Repositories;
@@ -7,9 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace MangaHub.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [Produces("application/json")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(StatusCodes.Status403Forbidden)]
 public class MangasController : ControllerBase
 {
     private readonly IMangaRepository _mangas;
@@ -43,6 +47,7 @@ public class MangasController : ControllerBase
     }
 
     /// <summary>Crea un manga nuevo.</summary>
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(MangaDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -64,6 +69,7 @@ public class MangasController : ControllerBase
     }
 
     /// <summary>Actualiza un manga existente.</summary>
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -86,6 +92,7 @@ public class MangasController : ControllerBase
     }
 
     /// <summary>Elimina un manga.</summary>
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
