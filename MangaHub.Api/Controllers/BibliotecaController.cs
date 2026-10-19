@@ -25,7 +25,7 @@ public class BibliotecaController : ControllerBase
         _mangas = mangas;
     }
 
-    // El id del usuario sale del token JWT (claim "sub"), nunca del cuerpo de la petición.
+    // el id sale del token (claim "sub"), no de lo que mande el cliente
     private int UsuarioId => int.Parse(User.FindFirst("sub")!.Value);
 
     /// <summary>Lista los mangas de mi biblioteca.</summary>

@@ -22,7 +22,7 @@ public class MangaHubFactory : WebApplicationFactory<Program>
 
     static MangaHubFactory()
     {
-        // Configuración solo para las pruebas (afecta únicamente a este proceso)
+        // configuracion solo para las pruebas
         Environment.SetEnvironmentVariable("Jwt__Key", "llave-solo-para-pruebas-de-integracion-1234567890");
         Environment.SetEnvironmentVariable("Jwt__Issuer", "MangaHubTests");
         Environment.SetEnvironmentVariable("Jwt__Audience", "MangaHubTestsUsers");
@@ -35,7 +35,7 @@ public class MangaHubFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            // Quitamos el DbContext que apunta a SQL Server y ponemos uno en memoria
+            // cambia el DbContext de SQL Server por uno en memoria
             services.RemoveAll<DbContextOptions<AppDbContext>>();
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(_dbName));
         });
@@ -48,7 +48,7 @@ public class MangaHubFactory : WebApplicationFactory<Program>
         using var scope = host.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        db.Database.EnsureCreated(); // crea la BD en memoria con los datos iniciales (seed)
+        db.Database.EnsureCreated(); // crea la BD en memoria con el seed
 
         db.Usuarios.Add(new Usuario
         {

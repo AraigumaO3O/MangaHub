@@ -5,10 +5,7 @@ namespace MangaHub.Api.Data;
 
 public static class DbSeeder
 {
-    /// <summary>
-    /// Crea el usuario Admin si no existe. El email y la contraseña vienen de las variables de
-    /// entorno Seed__AdminEmail y Seed__AdminPassword (nunca del repositorio).
-    /// </summary>
+    /// <summary>Crea el usuario Admin si no existe, con las variables Seed__AdminEmail y Seed__AdminPassword.</summary>
     public static async Task SeedAdminAsync(IServiceProvider services, IConfiguration config)
     {
         var email = config["Seed:AdminEmail"];

@@ -10,9 +10,7 @@ public class RequestLoggingMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<RequestLoggingMiddleware> _logger;
 
-    // El middleware se crea una sola vez (singleton), así que solo recibe
-    // dependencias singleton en el constructor (como ILogger).
-    // Si necesitara un servicio Scoped, se pediría como parámetro de InvokeAsync.
+    // se crea una sola vez, por eso solo recibe servicios Singleton en el constructor
     public RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
     {
         _next = next;

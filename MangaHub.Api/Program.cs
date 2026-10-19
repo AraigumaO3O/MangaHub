@@ -13,12 +13,12 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Los enums (EstadoLectura) se envían y reciben como texto: "Pendiente", "Leyendo", "Terminado"
+// enums como texto en el JSON
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
 
-// Versionamiento por URL: /api/v1/...
+// versionamiento por URL
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -33,7 +33,7 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// Documentación Swagger / OpenAPI
+// swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API REST para gestionar un catálogo de mangas y la biblioteca personal de cada lector."
     });
 
-    // Comentarios /// de los controladores (requiere GenerateDocumentationFile en el .csproj)
+    // comentarios /// de los controladores
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(options =>
         options.IncludeXmlComments(xmlPath);
     }
 
-    // Botón "Authorize" para pegar el token JWT
+    // boton Authorize para el token
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -79,7 +79,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Autenticación JWT. La llave, el emisor y la audiencia vienen de variables de entorno.
+// autenticacion JWT, los valores vienen de variables de entorno
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("Falta la variable de entorno Jwt__Key.");
 
@@ -87,7 +87,7 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.MapInboundClaims = false; // los claims se leen con el nombre que tienen en el token
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -104,26 +104,25 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
-// La cadena de conexión viene de la variable de entorno ConnectionStrings__Default.
-// AddDbContext registra el DbContext como Scoped (una instancia por petición HTTP).
+// la cadena de conexion viene de una variable de entorno (el DbContext queda Scoped)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
-// Los repositorios son Scoped, porque dependen del DbContext.
+// repositorios Scoped, igual que el DbContext
 builder.Services.AddScoped<IMangaRepository, MangaRepository>();
 builder.Services.AddScoped<ICatalogoRepository, CatalogoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
 
-// El servicio de tokens no guarda estado ni usa el DbContext, así que puede ser Singleton.
+// Singleton porque no guarda estado
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
 var app = builder.Build();
 
-// Middleware propio de logging (antes del manejador de errores, para registrar también los 500)
+// middleware propio, antes del manejo de errores para que registre tambien los 500
 app.UseMiddleware<RequestLoggingMiddleware>();
 
-// Errores no controlados -> respuesta ProblemDetails (JSON) con código 500
+// errores no controlados -> ProblemDetails
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
@@ -138,7 +137,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Crea el usuario Admin la primera vez (si las variables Seed__* están definidas)
+// crea el admin la primera vez (si estan las variables Seed__)
 await DbSeeder.SeedAdminAsync(app.Services, app.Configuration);
 
 app.Run();
