@@ -9,10 +9,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace MangaHub.Tests;
 
-/// <summary>
-/// Levanta la API completa en memoria, pero con una base de datos InMemory
-/// para no tocar la base real (MangaHubDb) durante las pruebas.
-/// </summary>
 public class MangaHubFactory : WebApplicationFactory<Program>
 {
     public const string AdminEmail = "admin.test@mangahub.com";
@@ -22,7 +18,6 @@ public class MangaHubFactory : WebApplicationFactory<Program>
 
     static MangaHubFactory()
     {
-        // configuracion solo para las pruebas
         Environment.SetEnvironmentVariable("Jwt__Key", "llave-solo-para-pruebas-de-integracion-1234567890");
         Environment.SetEnvironmentVariable("Jwt__Issuer", "MangaHubTests");
         Environment.SetEnvironmentVariable("Jwt__Audience", "MangaHubTestsUsers");
@@ -35,7 +30,6 @@ public class MangaHubFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            // cambia el DbContext de SQL Server por uno en memoria
             services.RemoveAll<DbContextOptions<AppDbContext>>();
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(_dbName));
         });
@@ -48,7 +42,7 @@ public class MangaHubFactory : WebApplicationFactory<Program>
         using var scope = host.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        db.Database.EnsureCreated(); // crea la BD en memoria con el seed
+        db.Database.EnsureCreated();
 
         db.Usuarios.Add(new Usuario
         {

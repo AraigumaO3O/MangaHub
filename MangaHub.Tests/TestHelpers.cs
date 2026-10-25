@@ -19,7 +19,6 @@ public static class TestHelpers
         return token!.Token;
     }
 
-    /// <summary>Cliente HTTP ya autenticado como Admin.</summary>
     public static async Task<HttpClient> ClienteAdminAsync(this MangaHubFactory factory)
     {
         var client = factory.CreateClient();
@@ -28,7 +27,6 @@ public static class TestHelpers
         return client;
     }
 
-    /// <summary>Registra un Lector nuevo (email único) y devuelve un cliente autenticado como él.</summary>
     public static async Task<HttpClient> ClienteLectorAsync(this MangaHubFactory factory)
     {
         var client = factory.CreateClient();

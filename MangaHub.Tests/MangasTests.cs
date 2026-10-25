@@ -72,28 +72,30 @@ public class MangasTests : IClassFixture<MangaHubFactory>
     {
         var admin = await _factory.ClienteAdminAsync();
 
-        // Crear (201)
+
         var creado = await admin.PostAsJsonAsync("/api/v1/Mangas",
             new { nombre = "Berserk", resumen = "Un mercenario", autorId = 3, categoriaId = 2 });
         Assert.Equal(HttpStatusCode.Created, creado.StatusCode);
         var manga = await creado.Content.ReadFromJsonAsync<MangaResponse>();
         Assert.Equal("Berserk", manga!.Nombre);
 
-        // Leer (200)
+
         var leido = await admin.GetAsync($"/api/v1/Mangas/{manga.Id}");
         Assert.Equal(HttpStatusCode.OK, leido.StatusCode);
 
-        // Actualizar (204) y comprobar el cambio
+
         var editado = await admin.PutAsJsonAsync($"/api/v1/Mangas/{manga.Id}",
             new { nombre = "Berserk (editado)", resumen = "Un mercenario", autorId = 3, categoriaId = 2 });
         Assert.Equal(HttpStatusCode.NoContent, editado.StatusCode);
 
+
         var despuesDeEditar = await admin.GetFromJsonAsync<MangaResponse>($"/api/v1/Mangas/{manga.Id}");
         Assert.Equal("Berserk (editado)", despuesDeEditar!.Nombre);
 
-        // Eliminar (204) y comprobar que ya no existe (404)
+
         var borrado = await admin.DeleteAsync($"/api/v1/Mangas/{manga.Id}");
         Assert.Equal(HttpStatusCode.NoContent, borrado.StatusCode);
+
 
         var yaNoExiste = await admin.GetAsync($"/api/v1/Mangas/{manga.Id}");
         Assert.Equal(HttpStatusCode.NotFound, yaNoExiste.StatusCode);
