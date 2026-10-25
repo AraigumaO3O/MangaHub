@@ -25,7 +25,6 @@ public class MangasController : ControllerBase
         _catalogo = catalogo;
     }
 
-    /// <summary>Lista todos los mangas.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<MangaDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<MangaDto>>> GetAll()
@@ -34,7 +33,6 @@ public class MangasController : ControllerBase
         return Ok(lista.Select(ToDto));
     }
 
-    /// <summary>Obtiene un manga por su id.</summary>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(MangaDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -46,7 +44,6 @@ public class MangasController : ControllerBase
         return Ok(ToDto(manga));
     }
 
-    /// <summary>Crea un manga nuevo.</summary>
     [Authorize(Roles = "Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(MangaDto), StatusCodes.Status201Created)]
@@ -68,7 +65,6 @@ public class MangasController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = creado.Id }, ToDto(creado));
     }
 
-    /// <summary>Actualiza un manga existente.</summary>
     [Authorize(Roles = "Admin")]
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -91,7 +87,6 @@ public class MangasController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>Elimina un manga.</summary>
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

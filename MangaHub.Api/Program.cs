@@ -13,12 +13,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// enums como texto en el JSON
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
 
-// versionamiento por URL
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -33,7 +31,6 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -44,7 +41,6 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API REST para gestionar un catálogo de mangas y la biblioteca personal de cada lector."
     });
 
-    // comentarios /// de los controladores
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -52,7 +48,6 @@ builder.Services.AddSwaggerGen(options =>
         options.IncludeXmlComments(xmlPath);
     }
 
-    // boton Authorize para el token
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -79,7 +74,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// autenticacion JWT, los valores vienen de variables de entorno
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("Falta la variable de entorno Jwt__Key.");
 
@@ -104,25 +98,20 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
-// la cadena de conexion viene de una variable de entorno (el DbContext queda Scoped)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
-// repositorios Scoped, igual que el DbContext
 builder.Services.AddScoped<IMangaRepository, MangaRepository>();
 builder.Services.AddScoped<ICatalogoRepository, CatalogoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
 
-// Singleton porque no guarda estado
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
 var app = builder.Build();
 
-// middleware propio, antes del manejo de errores para que registre tambien los 500
 app.UseMiddleware<RequestLoggingMiddleware>();
 
-// errores no controlados -> ProblemDetails
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
@@ -137,7 +126,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// crea el admin la primera vez (si estan las variables Seed__)
+
 await DbSeeder.SeedAdminAsync(app.Services, app.Configuration);
 
 app.Run();

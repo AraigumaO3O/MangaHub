@@ -2,15 +2,13 @@ using System.Diagnostics;
 
 namespace MangaHub.Api.Middleware;
 
-/// <summary>
-/// Middleware propio: registra método, ruta, código de estado y duración de cada petición.
-/// </summary>
+
 public class RequestLoggingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<RequestLoggingMiddleware> _logger;
 
-    // se crea una sola vez, por eso solo recibe servicios Singleton en el constructor
+
     public RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
     {
         _next = next;

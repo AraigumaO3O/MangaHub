@@ -21,7 +21,6 @@ public class AutoresController : ControllerBase
         _catalogo = catalogo;
     }
 
-    /// <summary>Lista los autores.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<AutorDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutorDto>>> GetAll()

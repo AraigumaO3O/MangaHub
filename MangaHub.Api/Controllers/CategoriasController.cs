@@ -21,7 +21,6 @@ public class CategoriasController : ControllerBase
         _catalogo = catalogo;
     }
 
-    /// <summary>Lista las categorías.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<CategoriaDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<CategoriaDto>>> GetAll()

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MangaHub.Api.Dtos;
 
-/// <summary>Datos que se envían para crear o actualizar un manga.</summary>
+
 public class MangaRequestDto
 {
     [Required(ErrorMessage = "El nombre es obligatorio.")]

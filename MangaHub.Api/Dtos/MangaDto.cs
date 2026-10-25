@@ -1,6 +1,6 @@
 namespace MangaHub.Api.Dtos;
 
-/// <summary>Datos de un manga que devuelve la API.</summary>
+
 public record MangaDto(
     int Id,
     string Nombre,

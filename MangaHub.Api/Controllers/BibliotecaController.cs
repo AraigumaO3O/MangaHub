@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MangaHub.Api.Controllers;
 
-/// <summary>Biblioteca personal: cada usuario solo ve y modifica sus propios mangas.</summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -25,10 +24,8 @@ public class BibliotecaController : ControllerBase
         _mangas = mangas;
     }
 
-    // el id sale del token (claim "sub"), no de lo que mande el cliente
     private int UsuarioId => int.Parse(User.FindFirst("sub")!.Value);
 
-    /// <summary>Lista los mangas de mi biblioteca.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<EntradaDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<EntradaDto>>> GetMiBiblioteca()
@@ -37,7 +34,6 @@ public class BibliotecaController : ControllerBase
         return Ok(entradas.Select(ToDto));
     }
 
-    /// <summary>Obtiene un manga de mi biblioteca.</summary>
     [HttpGet("{mangaId:int}")]
     [ProducesResponseType(typeof(EntradaDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -49,7 +45,6 @@ public class BibliotecaController : ControllerBase
         return Ok(ToDto(entrada));
     }
 
-    /// <summary>Agrega un manga a mi biblioteca.</summary>
     [HttpPost]
     [ProducesResponseType(typeof(EntradaDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -83,7 +78,6 @@ public class BibliotecaController : ControllerBase
         return CreatedAtAction(nameof(GetByManga), new { mangaId = creada.MangaId }, ToDto(creada));
     }
 
-    /// <summary>Cambia el estado de lectura y el capítulo actual de un manga de mi biblioteca.</summary>
     [HttpPut("{mangaId:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -100,7 +94,6 @@ public class BibliotecaController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>Quita un manga de mi biblioteca.</summary>
     [HttpDelete("{mangaId:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

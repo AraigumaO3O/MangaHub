@@ -3,7 +3,7 @@ using MangaHub.Api.Entities;
 
 namespace MangaHub.Api.Dtos;
 
-/// <summary>Datos para agregar un manga a la biblioteca personal.</summary>
+
 public class EntradaRequestDto
 {
     [Range(1, int.MaxValue, ErrorMessage = "Debes indicar un manga válido.")]
@@ -16,7 +16,7 @@ public class EntradaRequestDto
     public int CapituloActual { get; set; }
 }
 
-/// <summary>Datos para actualizar el estado de lectura de un manga de la biblioteca.</summary>
+
 public class EntradaUpdateDto
 {
     [EnumDataType(typeof(EstadoLectura), ErrorMessage = "El estado debe ser Pendiente, Leyendo o Terminado.")]

@@ -24,7 +24,6 @@ public class AuthController : ControllerBase
         _tokens = tokens;
     }
 
-    /// <summary>Registra un usuario nuevo con rol Lector.</summary>
     [HttpPost("register")]
     [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -45,14 +44,13 @@ public class AuthController : ControllerBase
         {
             Email = email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-            Rol = "Lector" // el rol Admin nunca se puede elegir al registrarse
+            Rol = "Lector"
         };
 
         var creado = await _usuarios.CrearAsync(usuario);
         return StatusCode(StatusCodes.Status201Created, new UsuarioDto(creado.Id, creado.Email, creado.Rol));
     }
 
-    /// <summary>Inicia sesión y devuelve un token JWT.</summary>
     [HttpPost("login")]
     [ProducesResponseType(typeof(TokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]

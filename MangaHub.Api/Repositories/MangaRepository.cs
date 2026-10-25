@@ -36,7 +36,7 @@ public class MangaRepository : IMangaRepository
         _context.Mangas.Add(manga);
         await _context.SaveChangesAsync();
 
-        // carga autor y categoria para devolver sus nombres
+
         await _context.Entry(manga).Reference(m => m.Autor).LoadAsync();
         await _context.Entry(manga).Reference(m => m.Categoria).LoadAsync();
         return manga;

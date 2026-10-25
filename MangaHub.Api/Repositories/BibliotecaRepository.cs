@@ -38,7 +38,7 @@ public class BibliotecaRepository : IBibliotecaRepository
         return entrada;
     }
 
-    // la entrada ya esta rastreada por el DbContext, solo se guardan los cambios
+
     public async Task ActualizarAsync(EntradaBiblioteca entrada)
     {
         await _context.SaveChangesAsync();
